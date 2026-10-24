@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema y librerías para PostgreSQL y MySQL
+# Instalar dependencias del sistema y Node.js (necesario para compilar Vite)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -11,7 +11,11 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
-# Instalar extensiones de PHP (incluyendo pgsql y pdo_pgsql)
+# Instalar Node.js y NPM para compilar los recursos de Vite
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Instalar extensiones de PHP
 RUN docker-php-ext-install pdo pdo_mysql pgsql pdo_pgsql mbstring gd
 
 # Instalar Composer
@@ -22,6 +26,9 @@ WORKDIR /var/www
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
+
+# Instalar dependencias de Node y compilar assets de Vite
+RUN npm install && npm run build
 
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
