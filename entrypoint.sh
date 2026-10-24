@@ -1,11 +1,13 @@
 #!/bin/sh
 
-echo "Esperando a que la base de datos responda..."
-sleep 5
+echo "Optimizando la aplicación para producción..."
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
 
-# Intentar migraciones de forma segura
+# Correr migraciones si hay pendientes
 php artisan migrate --force || true
-php artisan db:seed --force || true
 
-# Arrancar el servidor Laravel
+# Iniciar servidor web
 exec php artisan serve --host=0.0.0.0 --port=80
