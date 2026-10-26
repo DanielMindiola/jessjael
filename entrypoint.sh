@@ -9,7 +9,10 @@ php artisan route:clear
 # Correr migraciones
 php artisan migrate --force || true
 
-# Crear usuario admin y categorías de forma segura con slug
+# Crear enlace simbólico para las imágenes de almacenamiento
+php artisan storage:link || true
+
+# Crear usuario admin y categorías de forma segura
 php artisan tinker --execute="
 App\Models\User::updateOrCreate(['email' => 'landisgordita.com'], ['name' => 'Admin JessJael', 'password' => Illuminate\Support\Facades\Hash::make('Danielñañobello')]);
 App\Models\Category::firstOrCreate(['name' => 'Mujer'], ['slug' => 'mujer']);
