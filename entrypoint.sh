@@ -9,8 +9,13 @@ php artisan route:clear
 # Correr migraciones
 php artisan migrate --force || true
 
-# Crear usuario admin y categorías en una sola línea segura
-php artisan tinker --execute="App\Models\User::updateOrCreate(['email' => 'landisgordita.com'], ['name' => 'Admin JessJael', 'password' => Illuminate\Support\Facades\Hash::make('Danielñañobello')]); App\Models\Category::firstOrCreate(['name' => 'Mujer']); App\Models\Category::firstOrCreate(['name' => 'Hombre']); App\Models\Category::firstOrCreate(['name' => 'Colección 2026']);" || true
+# Crear usuario admin y categorías de forma segura con slug
+php artisan tinker --execute="
+App\Models\User::updateOrCreate(['email' => 'landisgordita.com'], ['name' => 'Admin JessJael', 'password' => Illuminate\Support\Facades\Hash::make('Danielñañobello')]);
+App\Models\Category::firstOrCreate(['name' => 'Mujer'], ['slug' => 'mujer']);
+App\Models\Category::firstOrCreate(['name' => 'Hombre'], ['slug' => 'hombre']);
+App\Models\Category::firstOrCreate(['name' => 'Colección 2026'], ['slug' => 'coleccion-2026']);
+" || true
 
 # Iniciar servidor web
 exec php artisan serve --host=0.0.0.0 --port=80
